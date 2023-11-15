@@ -7,19 +7,19 @@ export default async function handler(
   res: NextApiResponse
 ) {
   const { items, email } = req.body;
-  const modifiedItems = items.map((items: StoreProduct) => ({
-    quantity: items.quantity,
+  const modifiedItems = items.map((item: StoreProduct) => ({
+    quantity: item.quantity,
     price_data: {
       currency: "usd",
-      unit_amount: items.price * 100,
+      unit_amount: item.price * 100,
       product_data: {
-        name: items.title,
-        description: items.description,
-        images: [items.image],
+        name: item.title,
+        description: item.description,
+        images: [item.image],
       },
     },
   }));
-  const session = await stripe.checkout.session.create({
+  const session = await stripe.checkout.sessions.create({
     payment_method_types: ["card"],
     shipping_address_collection: {
       allowed_countries: ["BD", "US", "OM", "CA", "GB"],

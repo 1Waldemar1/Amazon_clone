@@ -10,7 +10,12 @@ const SuccessPage = () => {
       <h1 className="text-2xl text-hoverBg font-semibold">
         Thank you for shopping in amazon_clone
       </h1>
-      <Link href={"/"} onClick={() => dispatch(resetCart())}>
+      <Link
+        className="text-lg text-gray-500 hover:underline underline-offset-4
+        decoration-[1px] hover:text-blue-600 duration-300"
+        href={"/"}
+        onClick={() => dispatch(resetCart())}
+      >
         <p>Continue Shopping</p>
       </Link>
     </div>
