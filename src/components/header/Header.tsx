@@ -6,17 +6,23 @@ import { HiOutlineSearch } from "react-icons/hi";
 import { BiCaretDown } from "react-icons/bi";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
-import { StateProps } from "../../../type";
+import { StateProps, StoreProduct } from "../../../type";
 import { useSession, signIn } from "next-auth/react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { addUser, removeUser } from "@/store/nextSlice";
 
 const Header = () => {
   const { data: session } = useSession();
-  const { productData, favoriteData, userInfo } = useSelector(
+  const { productData, favoriteData, userInfo, allProducts } = useSelector(
     (state: StateProps) => state.next
   );
+
   const dispatch = useDispatch();
+
+  const [search, setSearch] = useState("");
+  const filteredProducts = allProducts.filter((items: StoreProduct) =>
+    items.title.toLowerCase().includes(search.toLowerCase())
+  );
 
   useEffect(() => {
     if (session) {
@@ -63,6 +69,8 @@ const Header = () => {
             className="w-full h-full rounded-md px-2 placeholder:text-sm text-base text-black
             border-[3px] border-transparent outline-none focus-visible:border-amazon_yellow"
             type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
             placeholder="Search a products"
           />
           <span
@@ -71,6 +79,18 @@ const Header = () => {
           >
             <HiOutlineSearch />
           </span>
+          {search && filteredProducts.length > 0 && (
+            <div className="absolute rounded-lg top-full w-full bg-white text-amazon_blue border border-gray-300">
+              {filteredProducts.map((product: StoreProduct) => (
+                <div
+                  key={product._id}
+                  className="p-2 border-b border-b-gray-400"
+                >
+                  <p>{product.title}</p>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
         {userInfo ? (
           <div

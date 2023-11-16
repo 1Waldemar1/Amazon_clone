@@ -7,7 +7,7 @@ import FormattedPrice from "./FormattedPrice";
 import { useDispatch } from "react-redux";
 import { addToCart, addToFavorite } from "@/store/nextSlice";
 
-const Products = ({ productData }: any) => {
+const Products = ({ productData, allProducts }: any) => {
   const dispatch = useDispatch();
   return (
     <div
