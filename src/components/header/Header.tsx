@@ -8,21 +8,43 @@ import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import { StateProps, StoreProduct } from "../../../type";
 import { useSession, signIn } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { addUser, removeUser } from "@/store/nextSlice";
+
+type PopupClick = MouseEvent & {
+  path: Node[];
+};
 
 const Header = () => {
   const { data: session } = useSession();
   const { productData, favoriteData, userInfo, allProducts } = useSelector(
     (state: StateProps) => state.next
   );
-
   const dispatch = useDispatch();
-
   const [search, setSearch] = useState("");
-  const filteredProducts = allProducts.filter((items: StoreProduct) =>
-    items.title.toLowerCase().includes(search.toLowerCase())
+  const [activeModal, setActiveModal] = useState(false);
+  const sortRef = useRef<HTMLDivElement>(null);
+  const filteredProducts = allProducts.filter(
+    (items: StoreProduct) =>
+      items.title.toLowerCase().includes(search.toLowerCase()) ||
+      items.brand.toLowerCase().includes(search.toLowerCase())
   );
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const _event = event as PopupClick;
+
+      const path = _event.path || (event.composedPath && event.composedPath());
+
+      if (sortRef.current && !(path && path.includes(sortRef.current))) {
+        setActiveModal(false);
+      }
+    };
+
+    document.body.addEventListener("click", handleClickOutside);
+
+    return () => document.body.removeEventListener("click", handleClickOutside);
+  }, []);
 
   useEffect(() => {
     if (session) {
@@ -62,13 +84,15 @@ const Header = () => {
           </div>
         </div>
         <div
-          className="flex-1 h-10 hidden md:inline-flex items-center justify-between
+          ref={sortRef}
+          className="flex-1 h-10 hidden mdl:inline-flex items-center justify-between
           relative"
         >
           <input
             className="w-full h-full rounded-md px-2 placeholder:text-sm text-base text-black
             border-[3px] border-transparent outline-none focus-visible:border-amazon_yellow"
             type="text"
+            onClick={() => setActiveModal(!activeModal)}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search a products"
@@ -79,15 +103,26 @@ const Header = () => {
           >
             <HiOutlineSearch />
           </span>
-          {search && filteredProducts.length > 0 && (
-            <div className="absolute rounded-lg top-full w-full bg-white text-amazon_blue border border-gray-300">
-              {filteredProducts.map((product: StoreProduct) => (
-                <div
-                  key={product._id}
-                  className="p-2 border-b border-b-gray-400"
+          {activeModal && search && filteredProducts.length > 0 && (
+            <div
+              className="absolute rounded-lg top-full w-full bg-white
+            text-amazon_blue border border-gray-300"
+            >
+              {filteredProducts.slice(0, 6).map((product: StoreProduct) => (
+                <Link
+                  onClick={() => setSearch("")}
+                  className="flex flex-col p-2 border-b border-b-gray-200
+                  first:rounded-lg last:rounded-lg cursor-pointer
+                  hover:bg-gray-100"
+                  href={{
+                    pathname: `/items/${product._id}`,
+                    query: {
+                      ...product,
+                    },
+                  }}
                 >
-                  <p>{product.title}</p>
-                </div>
+                  {product.title}
+                </Link>
               ))}
             </div>
           )}

@@ -1,24 +1,34 @@
 import { closeModal, openModal } from "@/store/modalSlice";
 import { resetCart } from "@/store/nextSlice";
 import { RootState } from "@/store/store";
-import React from "react";
+import { useRouter } from "next/router";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 const ResetCart = () => {
   const isOpen = useSelector((state: RootState) => state.popup.isOpen);
+  const router = useRouter();
   const dispatch = useDispatch();
 
   const handleOpenModal = () => {
     dispatch(openModal());
+    document.body.style.overflow = "hidden";
   };
 
   const handleCloseModal = () => {
     dispatch(closeModal());
+    if (typeof window !== "undefined") {
+      document.body.style.overflow = "";
+    }
   };
 
   const handleResetCart = () => {
     dispatch(closeModal());
     dispatch(resetCart());
+
+    if (typeof window !== "undefined") {
+      document.body.style.overflow = "";
+    }
   };
 
   const handleOverlayClick = (event: any) => {
@@ -26,6 +36,30 @@ const ResetCart = () => {
       handleCloseModal();
     }
   };
+
+  useEffect(() => {
+    const handleRouteChange = () => {
+      if (isOpen) {
+        handleCloseModal();
+      }
+    };
+
+    const handleRouteComplete = () => {
+      if (typeof window !== "undefined") {
+        document.body.style.overflow = "";
+      }
+    };
+
+    router.events.on("routeChangeStart", handleRouteChange);
+
+    router.events.on("routeChangeComplete", handleRouteComplete);
+
+    return () => {
+      router.events.off("routeChangeStart", handleRouteChange);
+
+      router.events.off("routeChangeComplete", handleRouteComplete);
+    };
+  }, [isOpen]);
 
   return (
     <div>
