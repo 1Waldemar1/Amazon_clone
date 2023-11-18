@@ -1,9 +1,9 @@
 import Image from "next/image";
 import React from "react";
-import FormattedPrice from "./products/FormattedPrice";
+import FormattedPrice from "../products/FormattedPrice";
 import { LuMinus, LuPlus } from "react-icons/lu";
 import { IoMdClose } from "react-icons/io";
-import { StoreProduct } from "../../type";
+import { StoreProduct } from "../../../type";
 import { useDispatch } from "react-redux";
 import {
   decreaseQuantity,

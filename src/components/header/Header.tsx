@@ -10,6 +10,7 @@ import { StateProps, StoreProduct } from "../../../type";
 import { useSession, signIn } from "next-auth/react";
 import { useEffect, useRef, useState } from "react";
 import { addUser, removeUser } from "@/store/nextSlice";
+import FormattedPrice from "../products/FormattedPrice";
 
 type PopupClick = MouseEvent & {
   path: Node[];
@@ -105,15 +106,15 @@ const Header = () => {
           </span>
           {activeModal && search && filteredProducts.length > 0 && (
             <div
-              className="absolute rounded-lg top-full w-full bg-white
+              className="absolute rounded-lg top-[46px] w-full bg-white
             text-amazon_blue border border-gray-300"
             >
               {filteredProducts.slice(0, 6).map((product: StoreProduct) => (
                 <Link
+                  key={product._id}
                   onClick={() => setSearch("")}
-                  className="flex flex-col p-2 border-b border-b-gray-200
-                  first:rounded-lg last:rounded-lg cursor-pointer
-                  hover:bg-gray-100"
+                  className="flex flex-col p-2
+                  first:rounded-lg last:rounded-lg cursor-pointer"
                   href={{
                     pathname: `/items/${product._id}`,
                     query: {
@@ -121,7 +122,23 @@ const Header = () => {
                     },
                   }}
                 >
-                  {product.title}
+                  <div
+                    className="flex justify-between items-center px-2 hover:bg-gray-100
+                    rounded-lg"
+                  >
+                    <div className="flex items-center gap-4">
+                      <Image
+                        src={product.image}
+                        width={60}
+                        height={60}
+                        alt="productImg"
+                      />
+                      <p className=" text-base font-medium">{product.title}</p>
+                    </div>
+                    <div className="text-amazon_blue font-semibold">
+                      <FormattedPrice amount={product.price} />
+                    </div>
+                  </div>
                 </Link>
               ))}
             </div>

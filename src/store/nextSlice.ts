@@ -31,10 +31,10 @@ export const nextSlice = createSlice({
     },
     addToFavorite: (state, action) => {
       const existingProduct = state.favoriteData.find(
-        (item: StoreProduct) => item._id === action.payload
+        (item: StoreProduct) => item._id === action.payload._id
       );
       if (existingProduct) {
-        existingProduct.quantity += action.payload;
+        existingProduct.quantity = 1;
       } else {
         state.favoriteData.push(action.payload);
       }
@@ -60,8 +60,16 @@ export const nextSlice = createSlice({
         (item: StoreProduct) => item._id !== action.payload._id
       );
     },
+    deleteFavorite: (state, action) => {
+      state.favoriteData = state.favoriteData.filter(
+        (item: StoreProduct) => item._id !== action.payload._id
+      );
+    },
     resetCart: (state) => {
       state.productData = [];
+    },
+    resetFavoriteItems: (state) => {
+      state.favoriteData = [];
     },
     addUser: (state, action) => {
       state.userInfo = action.payload;
@@ -81,7 +89,9 @@ export const {
   increaseQuantity,
   decreaseQuantity,
   deleteProduct,
+  deleteFavorite,
   resetCart,
+  resetFavoriteItems,
   addUser,
   removeUser,
   setAllProducts,

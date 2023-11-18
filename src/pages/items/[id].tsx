@@ -54,7 +54,7 @@ const DynamicPage = () => {
         </div>
       ) : (
         <div>
-          <div className="w-full grid md:grid-cols-3 gap-3 bg-gray-100 rounded-lg">
+          <div className="w-full grid md:grid-cols-3 gap-3 rounded-lg">
             <div className="flex items-center justify-center bg-gray-200 rounded-lg relative group overflow-hidden">
               <Image
                 src={product.image}
@@ -151,7 +151,7 @@ const DynamicPage = () => {
                     }
                     className="w-full md:w-96 h-12 bg-amazon_blue text-gray-200
                   hover:bg-amazon_yellow hover:text-amazon_blue duration-300 rounded-lg mt-5
-                  text-base font-semibold"
+                    text-base font-semibold"
                   >
                     add to cart
                   </button>
@@ -173,8 +173,8 @@ const DynamicPage = () => {
                       )
                     }
                     className="w-12 h-12 mt-5 border rounded-lg border-gray-400 flex items-center
-                  justify-center text-xl bg-transparent hover:bg-amazon_yellow
-                  cursor-pointer duration-300"
+                    justify-center text-xl bg-transparent hover:bg-amazon_yellow
+                    cursor-pointer duration-300"
                   >
                     <FaHeart />
                   </span>
@@ -192,11 +192,12 @@ const DynamicPage = () => {
               <div className="grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-5">
                 {filteredProducts.slice(0, 4).map((item: ProductProps) => (
                   <div
-                    onClick={() => handleProductClick(item)}
+                    key={item._id}
                     className="w-full mt-6 bg-white text-black p-4 border border-gray-300
-                    rounded-lg group overflow-hidden"
+                    rounded-lg group overflow-hidden relative"
                   >
                     <Link
+                      onClick={() => handleProductClick(item)}
                       href={{
                         pathname: `/items/${item._id}`,
                         query: {
@@ -221,58 +222,6 @@ const DynamicPage = () => {
                           height={300}
                           alt="productImg"
                         />
-                        <div
-                          className="w-8 h-16 absolute bottom-10 -right-3 border border-gray-400
-                        bg-white rounded-md flex flex-col translate-x-20 group-hover:translate-x-0
-                          transition-transform duration-300"
-                        >
-                          <span
-                            onClick={() =>
-                              dispatch(
-                                addToCart({
-                                  _id: item._id,
-                                  title: item.title,
-                                  brand: item.brand,
-                                  category: item.category,
-                                  description: item.description,
-                                  image: item.image,
-                                  isNew: item.isNew,
-                                  oldPrice: item.oldPrice,
-                                  price: item.price,
-                                  quantity: 1,
-                                })
-                              )
-                            }
-                            className="w-full h-full border-b border-b-gray-400
-                            flex items-center justify-center text-xl bg-transparent
-                          hover:bg-amazon_yellow cursor-pointer duration-300"
-                          >
-                            <HiShoppingCart />
-                          </span>
-                          <span
-                            onClick={() =>
-                              dispatch(
-                                addToFavorite({
-                                  _id: item._id,
-                                  title: item.title,
-                                  brand: item.brand,
-                                  category: item.category,
-                                  description: item.description,
-                                  image: item.image,
-                                  isNew: item.isNew,
-                                  oldPrice: item.oldPrice,
-                                  price: item.price,
-                                  quantity: 1,
-                                })
-                              )
-                            }
-                            className="w-full h-full border-b border-b-gray-400
-                            flex items-center justify-center text-xl bg-transparent
-                          hover:bg-amazon_yellow cursor-pointer duration-300"
-                          >
-                            <FaHeart />
-                          </span>
-                        </div>
                       </div>
                       <hr />
                       <div className="px-4 py-3 flex flex-col gap-1">
@@ -292,6 +241,58 @@ const DynamicPage = () => {
                         </p>
                       </div>
                     </Link>
+                    <div
+                      className="w-8 h-16 absolute top-[140px] right-2 border border-gray-400
+                        bg-white rounded-md flex flex-col translate-x-20 group-hover:translate-x-0
+                          transition-transform duration-300"
+                    >
+                      <span
+                        onClick={() =>
+                          dispatch(
+                            addToCart({
+                              _id: item._id,
+                              title: item.title,
+                              brand: item.brand,
+                              category: item.category,
+                              description: item.description,
+                              image: item.image,
+                              isNew: item.isNew,
+                              oldPrice: item.oldPrice,
+                              price: item.price,
+                              quantity: 1,
+                            })
+                          )
+                        }
+                        className="w-full h-full border-b border-b-gray-400
+                            flex items-center justify-center text-xl bg-transparent
+                          hover:bg-amazon_yellow cursor-pointer duration-300"
+                      >
+                        <HiShoppingCart />
+                      </span>
+                      <span
+                        onClick={() =>
+                          dispatch(
+                            addToFavorite({
+                              _id: item._id,
+                              title: item.title,
+                              brand: item.brand,
+                              category: item.category,
+                              description: item.description,
+                              image: item.image,
+                              isNew: item.isNew,
+                              oldPrice: item.oldPrice,
+                              price: item.price,
+                              quantity: 1,
+                            })
+                          )
+                        }
+                        className="w-full h-full border-b border-b-gray-400
+                            flex items-center justify-center text-xl bg-transparent
+                          hover:bg-amazon_yellow cursor-pointer duration-300"
+                      >
+                        <FaHeart />
+                      </span>
+                    </div>
                     <button
                       onClick={() =>
                         dispatch(

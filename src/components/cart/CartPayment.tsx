@@ -1,7 +1,7 @@
 import { SiMediamarkt } from "react-icons/si";
-import FormattedPrice from "./products/FormattedPrice";
+import FormattedPrice from "../products/FormattedPrice";
 import { useSelector } from "react-redux";
-import { StateProps, StoreProduct } from "../../type";
+import { StateProps, StoreProduct } from "../../../type";
 import { useEffect, useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { useSession } from "next-auth/react";
