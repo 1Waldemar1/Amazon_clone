@@ -7,6 +7,7 @@ import FormattedPrice from "./FormattedPrice";
 import { useDispatch } from "react-redux";
 import { addToCart, addToFavorite } from "@/store/nextSlice";
 import Link from "next/link";
+import DynamicPage from "@/pages/items/[id]";
 
 const Products = ({ productData }: any) => {
   const dispatch = useDispatch();
@@ -45,6 +46,7 @@ const Products = ({ productData }: any) => {
                   isNew: isNew,
                   oldPrice: oldPrice,
                   price: price,
+                  quantity: 1,
                 },
               }}
             >
@@ -95,15 +97,15 @@ const Products = ({ productData }: any) => {
                 onClick={() =>
                   dispatch(
                     addToCart({
-                      _id,
-                      title,
-                      brand,
-                      category,
-                      description,
-                      image,
-                      isNew,
-                      oldPrice,
-                      price,
+                      _id: _id,
+                      brand: brand,
+                      category: category,
+                      description: description,
+                      image: image,
+                      isNew: isNew,
+                      oldPrice: oldPrice,
+                      price: price,
+                      title: title,
                       quantity: 1,
                     })
                   )
@@ -118,15 +120,15 @@ const Products = ({ productData }: any) => {
                 onClick={() =>
                   dispatch(
                     addToFavorite({
-                      _id,
-                      title,
-                      brand,
-                      category,
-                      description,
-                      image,
-                      isNew,
-                      oldPrice,
-                      price,
+                      _id: _id,
+                      brand: brand,
+                      category: category,
+                      description: description,
+                      image: image,
+                      isNew: isNew,
+                      oldPrice: oldPrice,
+                      price: price,
+                      title: title,
                       quantity: 1,
                     })
                   )
@@ -142,15 +144,15 @@ const Products = ({ productData }: any) => {
               onClick={() =>
                 dispatch(
                   addToCart({
-                    _id,
-                    title,
-                    brand,
-                    category,
-                    description,
-                    image,
-                    isNew,
-                    oldPrice,
-                    price,
+                    _id: _id,
+                    brand: brand,
+                    category: category,
+                    description: description,
+                    image: image,
+                    isNew: isNew,
+                    oldPrice: oldPrice,
+                    price: price,
+                    title: title,
                     quantity: 1,
                   })
                 )

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
+import error_img from "../../images/error_img.jpg";
 import FormattedPrice from "@/components/products/FormattedPrice";
 import { addToCart, addToFavorite } from "@/store/nextSlice";
 import { useRouter } from "next/router";
@@ -10,8 +11,21 @@ import { BeatLoader } from "react-spinners";
 import { ProductProps, StateProps, StoreProduct } from "../../../type";
 import Link from "next/link";
 
+type Product = {
+  _id?: number;
+  title?: string;
+  brand?: string;
+  category?: string;
+  description?: string;
+  image?: string;
+  isNew?: boolean;
+  oldPrice?: number;
+  price?: number;
+  quantity?: number;
+};
+
 const DynamicPage = () => {
-  const [product, setProduct] = useState<any>({});
+  const [product, setProduct] = useState<Product>({});
   const [isLoading, setIsLoading] = useState(true);
   const { allProducts } = useSelector((state: StateProps) => state.next);
   const router = useRouter();
@@ -42,7 +56,20 @@ const DynamicPage = () => {
     setTimeout(() => {
       setIsLoading(false);
     }, 1000);
-    setProduct(router.query);
+    if (router.query._id) {
+      setProduct({
+        _id: Number(router.query._id),
+        title: router.query.title as string,
+        brand: router.query.brand as string,
+        category: router.query.category as string,
+        description: router.query.description as string,
+        image: router.query.image as string,
+        isNew: Boolean(router.query.isNew),
+        oldPrice: Number(router.query.oldPrice),
+        price: Number(router.query.price),
+        quantity: Number(router.query.quantity),
+      });
+    }
   }, [router.query]);
 
   return (
@@ -57,7 +84,7 @@ const DynamicPage = () => {
           <div className="w-full grid md:grid-cols-3 gap-3 rounded-lg">
             <div className="flex items-center justify-center bg-gray-200 rounded-lg relative group overflow-hidden">
               <Image
-                src={product.image}
+                src={product.image || error_img}
                 alt="product image"
                 width={500}
                 height={500}
@@ -119,16 +146,18 @@ const DynamicPage = () => {
                 <p className="text-base text-gray-600 flex items-center gap-1">
                   Price:
                   <span className="text-lg text-amazon_blue font-semibold">
-                    <FormattedPrice amount={product.price} />
+                    <FormattedPrice amount={product.price || 0} />
                   </span>
                   <span className="ml-1 line-through">
-                    <FormattedPrice amount={product.oldPrice} />
+                    <FormattedPrice amount={product.oldPrice || 0} />
                   </span>
                 </p>
                 <p className="text-sm text-gray-500 flex items-center gap-1">
                   Your saved:{" "}
                   <span>
-                    <FormattedPrice amount={product.oldPrice - product.price} />
+                    <FormattedPrice
+                      amount={(product.oldPrice || 0) - (product.price || 0)}
+                    />
                   </span>
                 </p>
                 <div className="flex gap-2 items-center">
